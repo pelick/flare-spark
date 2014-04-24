@@ -1,9 +1,45 @@
-# Flare
-Flare aims to support Pig on Spark, 
+# Flare Spark
+Flare aims to support Pig on Spark, and support reading data from ORCFile, for loading less data to memory.
 
 ## Current Progress
 Support reading ORCFile as OrcfileRDD. You can create OrcfileRDD by import org.apache.spark.flare.FlareContext
 
+## Example on OrcfileRDD
+After building the whole project, you can try out OrcfileRDD in spark-shell like this:
+
+    import org.apache.spark.flare._
+    import org.apache.spark.flare.rdd._
+    
+    val fc = new FlareContext(sc)
+    
+    import org.apache.hadoop.conf.Configuration
+    import org.apache.hadoop.hive.serde2.ColumnProjectionUtils
+    import org.apache.hadoop.mapred.JobConf
+    
+    val conf = new Configuration ()
+    // your own hdfs
+    conf.set("fs.defaultFS", "hdfs://namenode:port")
+    // cut out some columns if you want (Optional)
+    conf.set(ColumnProjectionUtils.READ_COLUMN_IDS_CONF_STR, "0,1,3,10")
+    // name them (Optional)
+    conf.set(ColumnProjectionUtils.READ_COLUMN_NAMES_CONF_STR, "col0,col1,col3,col10")
+    
+    val orcRdd = fc.orcfileRDD(new JobConf(conf), "/path/orcfile_00001")
+    orcRdd.first()
+    
+    // currently, expression supporting is simple: 
+    // "columnName > Long"
+    val exp = fc.orcfileRDDWithExpr(new JobConf(conf), "col10 > 1000", "/tmp/orcfile_00001")
+    exp.first()
+    
+## Future Support
+More expression on Filtering.
+
+TODO bla bla bla
+
+*****
+Beneath is Spark README.md
+*****
 
 # Apache Spark
 
