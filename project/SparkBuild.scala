@@ -66,6 +66,8 @@ object SparkBuild extends Build {
 
   lazy val bagel = Project("bagel", file("bagel"), settings = bagelSettings) dependsOn(core)
 
+  lazy val bagel = Project("flare", file("flare"), settings = flareSettings) dependsOn(core) dependsOn(hive)
+
   lazy val graphx = Project("graphx", file("graphx"), settings = graphxSettings) dependsOn(core)
 
   lazy val catalyst = Project("catalyst", file("sql/catalyst"), settings = catalystSettings) dependsOn(core)
@@ -82,7 +84,7 @@ object SparkBuild extends Build {
   lazy val mllib = Project("mllib", file("mllib"), settings = mllibSettings) dependsOn(core)
 
   lazy val assemblyProj = Project("assembly", file("assembly"), settings = assemblyProjSettings)
-    .dependsOn(core, graphx, bagel, mllib, streaming, repl, sql) dependsOn(maybeYarn: _*) dependsOn(maybeHive: _*) dependsOn(maybeGanglia: _*)
+    .dependsOn(core, graphx, bagel, mllib, streaming, repl, sql, flare) dependsOn(maybeYarn: _*) dependsOn(maybeHive: _*) dependsOn(maybeGanglia: _*)
 
   lazy val assembleDeps = TaskKey[Unit]("assemble-deps", "Build assembly of dependencies and packages Spark projects")
 
@@ -443,6 +445,16 @@ object SparkBuild extends Build {
   def bagelSettings = sharedSettings ++ Seq(
     name := "spark-bagel",
     previousArtifact := sparkPreviousArtifact("spark-bagel")
+  )
+
+  def flareSettings = sharedSettings ++ Seq(
+    name := "spark-flare",
+    previousArtifact := sparkPreviousArtifact("spark-flare"),
+    libraryDependencies ++= Seq(
+      "org.apache.hive" % "hive-metastore" % "0.12.0",
+      "org.apache.hive" % "hive-exec" % "0.12.0",
+      "org.apache.hive" % "hive-serde" % "0.12.0"
+    )
   )
 
   def mllibSettings = sharedSettings ++ Seq(

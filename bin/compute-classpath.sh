@@ -44,6 +44,7 @@ if [ -f "$ASSEMBLY_DIR"/spark-assembly*hadoop*-deps.jar ]; then
   CLASSPATH="$CLASSPATH:$FWDIR/sql/catalyst/target/scala-$SCALA_VERSION/classes"
   CLASSPATH="$CLASSPATH:$FWDIR/sql/core/target/scala-$SCALA_VERSION/classes"
   CLASSPATH="$CLASSPATH:$FWDIR/sql/hive/target/scala-$SCALA_VERSION/classes"
+  CLASSPATH="$CLASSPATH:$FWDIR/flare/target/scala-$SCALA_VERSION/classes"
 
   DEPS_ASSEMBLY_JAR=`ls "$ASSEMBLY_DIR"/spark-assembly*hadoop*-deps.jar`
   CLASSPATH="$CLASSPATH:$DEPS_ASSEMBLY_JAR"
@@ -52,6 +53,8 @@ else
   if [ -f "$FWDIR/RELEASE" ]; then
     ASSEMBLY_JAR=`ls "$FWDIR"/jars/spark*-assembly*.jar`
   else
+    # add flare here
+    CLASSPATH="$CLASSPATH:$FWDIR/flare/target/scala-$SCALA_VERSION/classes"
     ASSEMBLY_JAR=`ls "$ASSEMBLY_DIR"/spark*-assembly*hadoop*.jar`
   fi
   CLASSPATH="$CLASSPATH:$ASSEMBLY_JAR"
@@ -85,6 +88,7 @@ if [[ $SPARK_TESTING == 1 ]]; then
   CLASSPATH="$CLASSPATH:$FWDIR/sql/catalyst/target/scala-$SCALA_VERSION/test-classes"
   CLASSPATH="$CLASSPATH:$FWDIR/sql/core/target/scala-$SCALA_VERSION/test-classes"
   CLASSPATH="$CLASSPATH:$FWDIR/sql/hive/target/scala-$SCALA_VERSION/test-classes"
+  CLASSPATH="$CLASSPATH:$FWDIR/flare/target/scala-$SCALA_VERSION/test-classes"
 fi
 
 # Add hadoop conf dir if given -- otherwise FileSystem.*, etc fail !
