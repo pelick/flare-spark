@@ -1,3 +1,10 @@
+# Flare
+Flare aims to support Pig on Spark, 
+
+## Current Progress
+Support reading ORCFile as OrcfileRDD. You can create OrcfileRDD by import org.apache.spark.flare.FlareContext
+
+
 # Apache Spark
 
 Lightning-Fast Cluster Computing - <http://spark.apache.org/>
